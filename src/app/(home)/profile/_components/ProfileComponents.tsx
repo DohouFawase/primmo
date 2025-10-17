@@ -12,7 +12,7 @@ export default function ProfileComponents() {
                     </div>
 
                         <div className="space-y-1.5">
-                            <p>Nom Lorem ipsum</p>
+                            <p className="text-lg font-semibold text-white">Nom Lorem ipsum</p>
                             <div className="flex items-center gap-2">
                                 <img src="/verified-rounded.png" alt="" className="w-3 h-3" />
                                 <span className="text-base text-white">Profil vérifié</span>

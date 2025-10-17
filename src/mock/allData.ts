@@ -1,3 +1,5 @@
+import { StatCardData } from "@/types/CardTypes"
+
 export const FootdatMockData =
 {
     "primmmio": [
@@ -375,3 +377,123 @@ export const FiltreData = {
         }
     ]
 }
+
+
+
+export const  StataData: StatCardData[] = [
+  {
+    "id": "card-annonces",
+    "title": "Mes annonces",
+    "lines": [
+      {
+        "label": "Total annonces :",
+        "value": 35,
+        "highlight": true
+      },
+      {
+        "label": "Actives :",
+        "value": 20
+      },
+      {
+        "label": "En attente :",
+        "value": 10
+      },
+      {
+        "label": "Désactivées :",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": "card-performances",
+    "title": "Performances (30 derniers jours)",
+    "lines": [
+      {
+        "label": "Vues totales",
+        "value": 104520,
+        "highlight": true
+      },
+      {
+        "label": "Contacts reçus :",
+        "value": 520,
+        "highlight": true
+      },
+      {
+        "label": "Contacts non lus :",
+        "value": 225,
+        "highlight": true
+      }
+    ]
+  },
+  {
+    "id": "card-abonnement",
+    "title": "Abonnement actuel",
+    "lines": [
+      {
+        "label": "Plan :",
+        "value": "Premium",
+        "highlight": true
+      },
+      {
+        "label": "Expire le :",
+        "value": "12 Septembre 2026",
+        "highlight": true
+      }
+    ],
+    "button": {
+      "label": "Upgrader"
+      
+    }
+  }
+]
+
+
+
+
+export const AnnonceDataMock = [
+  {
+    "id": "AN-001",
+    "titre": "Appartement T4 Spacieux avec Balcon",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos...",
+    "typeContrat": "A Louer",
+    "statut": "En attente",
+    "imageURL": "https://example.com/images/apt-t4.jpg",
+    "estActive": false 
+  },
+  {
+    "id": "AN-002",
+    "titre": "Villa Moderne 5 Chambres - Vue Mer",
+    "description": "Magnifique villa neuve située en front de mer. Design contemporain, piscine à débordement et finitions de haute qualité. Parfait pour une résidence principale ou un investissement locatif de luxe.",
+    "typeContrat": "A Vendre",
+    "statut": "Approuvée",
+    "imageURL": "https://example.com/images/villa-vue-mer.jpg",
+    "estActive": true 
+  },
+  {
+    "id": "AN-003",
+    "titre": "Studio Meublé Proche Université",
+    "description": "Petit studio idéal pour étudiant, entièrement meublé et équipé. Très bien situé, à deux pas des transports en commun et du campus universitaire. Faibles charges. Disponible immédiatement.",
+    "typeContrat": "A Louer",
+    "statut": "Rejetée",
+    "imageURL": "https://example.com/images/studio-uni.jpg",
+    "estActive": false 
+  },
+  {
+    "id": "AN-004",
+    "titre": "Local Commercial - Zone Industrielle",
+    "description": "Grand espace de 500m² avec bureaux et entrepôt. Accès facile pour les poids lourds. Idéal pour logistique ou production légère. Bail 3/6/9 standard.",
+    "typeContrat": "A Louer",
+    "statut": "Archivée",
+    "imageURL": "https://example.com/images/local-commercial.jpg",
+    "estActive": false 
+  },
+  {
+    "id": "AN-005",
+    "titre": "Terrain Constructible 800m²",
+    "description": "Rare opportunité ! Terrain plat et viabilisé dans un quartier résidentiel calme. Permis de construire déjà accepté pour une maison individuelle de 150m². Étude de sol fournie.",
+    "typeContrat": "A Vendre",
+    "statut": "Approuvée",
+    "imageURL": "",
+    "estActive": true 
+  }
+]
