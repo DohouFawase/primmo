@@ -103,7 +103,7 @@ const AnnonceCard: React.FC<AnnonceCardProps> = ({
             className="flex items-center text-gray-700 hover:text-blue-600 transition"
           >
             <Pencil className="mr-2 text-xl" /> 
-            <span className="font-medium">Éditer l`&#39;`annonce</span>
+            <span className="font-medium">Éditer l&#39;annonce</span>
           </button>
           
           <div className="flex items-center justify-between mt-4 pt-2 border-t border-gray-200">
