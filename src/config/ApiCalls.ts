@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const Api = axios.create({
     baseURL: 'http://127.0.0.1:8000/api/v1',
     // baseURL: BASE_URL,
-    timeout: 5000, // Augmenté à 5000 ms (5 secondes)
+     timeout: 30000, // Augmenté à 5000 ms (5 secondes)
     headers: { 'Content-Type': 'application/json' }
 });
 

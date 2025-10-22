@@ -4,7 +4,7 @@ import { Bell, Menu, CircleUserRound } from 'lucide-react';
 
 export default function NavigationBar() {
     return (
-        <div className='px-8 md:px-16 py-9 max-w-7xl mx-auto'>
+        <div className='px-4 py-9 container   mx-auto'>
             <div className="bg-[#EBEBEB] rounded-xl px-8 py-4 flex items-center justify-between ">
                 <img src="/LOGO.png" alt="primmo_logo.png" />
 

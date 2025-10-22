@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 export default function ProfileComponents() {
     return (
         <div className="">
-            <div className="max-w-7xl mx-auto px-8 md:px-18">
+            <div className="container   mx-auto px-4 md:px-18">
                 <div className="flex md:flex-row flex-shrink-0 flex-col  gap-8">
                     <div className="md:w-1/3 py-8 bg-[#007BFF]  rounded-2xl flex flex-col justify-center space-y-4 items-center ">
                     <div className=" ">

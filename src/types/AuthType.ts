@@ -1,5 +1,5 @@
 // All Authentication Types
-import { LoginFormSchema, ForgotPassFormSchema, ChangePassFormSchema } from "@/schema/AuthFormSchema";
+import { LoginFormSchema, ForgotPassFormSchema, ChangePassFormSchema, RegisterFormSchema, VerifyLoginOtpSchema, LoginWithPasswordSchema, VerifyAccountSchema, ForgotPasswordSchema, ResetPasswordWithOtpSchema, CheckEmailSchema, } from "@/schema/AuthFormSchema";
 import z from "zod";
 
 /**
@@ -20,10 +20,9 @@ export type LoginType = {
  * @property {string} password - The user's password.
  */
 export type RegisterType = {
-    name: string;
-    lastname: string;
-    firstname: string;
-    password: string;
+   email: string;
+  password: string;
+  password_confirmation: string;
 }
 
 /**
@@ -41,7 +40,7 @@ export type ForgotPassType = {
 export type ChangePassType = {
     current_password: string;
     new_password: string;
-    confirm_password: string;
+    password_confirmation: string;
 }
 
 
@@ -69,4 +68,13 @@ export type ChangePasswordFormInputs = z.infer<typeof ChangePassFormSchema>;
  * @typedef {z.infer<typeof RegisterFormSchema>} RegisterFormInputs
  * @description Inferred type for the registration form based on the Zod schema.
  */
-export type RegisterFormInputs = z.infer<typeof ChangePassFormSchema>;
+export type RegisterFormInputs = z.infer<typeof RegisterFormSchema>;
+
+
+
+export type CheckEmailInputs = z.infer<typeof CheckEmailSchema>;
+export type VerifyLoginOtpInputs = z.infer<typeof VerifyLoginOtpSchema>;
+export type LoginWithPasswordInputs = z.infer<typeof LoginWithPasswordSchema>;
+export type VerifyAccountInputs = z.infer<typeof VerifyAccountSchema>;
+export type ForgotPasswordInputs = z.infer<typeof ForgotPasswordSchema>;
+export type ResetPasswordWithOtpInputs = z.infer<typeof ResetPasswordWithOtpSchema>;

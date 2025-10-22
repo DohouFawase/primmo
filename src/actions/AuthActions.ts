@@ -1,175 +1,402 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { LoginFormInputs, RegisterFormInputs } from '@/types/AuthType';
-import { AuthSuccessPayload, AuthRejectedPayload, LoginSuccessPayload, UpdateProfileInfoPayload } from '@/interface/UserInterface';
+import { 
+    LoginFormInputs, 
+    RegisterFormInputs, 
+    CheckEmailInputs, 
+    VerifyLoginOtpInputs,
+    LoginWithPasswordInputs,
+    VerifyAccountInputs,
+    ForgotPasswordInputs,
+    ResetPasswordWithOtpInputs
+} from '@/types/AuthType';
+import { 
+    AuthSuccessPayload, 
+    AuthRejectedPayload, 
+    LoginSuccessPayload, 
+    UpdateProfileInfoPayload,
+    CheckEmailSuccessPayload,
+    VerifyOtpSuccessPayload
+} from '@/interface/UserInterface';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import Api from '@/config/ApiCalls';
-/**
- * Redux Toolkit asynchronous thunks for user authentication.
- * @module AuthActions
- */
 
-/**
- * Creates a new user by sending a registration request to the API.
- * This thunk handles the entire lifecycle of a registration attempt.
- *
- * @function creatUserActions
- * @param {RegisuserIdterFormInputs} userData - The user's registration data (email, password, etc.).
- * @returns {Promise<AuthSuccessPayload | AuthRejectedPayload>} A promise that resolves with the success payload or rejects with an error payload.
- */
+// ═══════════════════════════════════════════════════════════════════════
+// INSCRIPTION (REGISTER)
+// ═══════════════════════════════════════════════════════════════════════
+
 export const creatUserActions = createAsyncThunk<
     AuthSuccessPayload,
     RegisterFormInputs,
     { rejectValue: AuthRejectedPayload }
 >(
-    'users/creatUser',
+    'auth/register',
     async (userData, { rejectWithValue }) => {
         try {
-            const request = await Api.post('/sign-up', userData);
-            toast.success(request.data.message || "Account created successfully!");
-            return request.data;
+            const response = await Api.post('/sign-up', userData);
+            toast.success(response.data.message || "Compte créé avec succès ! Vérifiez votre email.");
+            return response.data;
         } catch (error) {
             if (error instanceof AxiosError) {
-                const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
+                const errorMessage = error.response?.data?.message || "Une erreur est survenue lors de l'inscription.";
                 toast.error(errorMessage);
                 return rejectWithValue({ message: errorMessage });
             }
-
-            const errorMessage = "An unexpected error occurred.";
+            const errorMessage = "Une erreur inattendue est survenue.";
             toast.error(errorMessage);
-            return rejectWithValue({ message: errorMessage });
-        }
-    },
-);
-
-/**
- * Authenticates a user by sending a login request to the API.
- * This thunk manages the entire login process, including API communication and error handling.
- *
- * @function loginUserActions
- * @param {LoginFormInputs} credentials - The user's login credentials (email and password).
- * @returns {Promise<Loimport { UserGeneralFormInputs } from '@/types/UserType';ginSuccessPayload | AuthRejectedPayload>} A promise that resolves with the login success payload or rejects with an error payload.
- */
-export const loginUserActions = createAsyncThunk<
-    LoginSuccessPayload,
-    LoginFormInputs,
-    { rejectValue: AuthRejectedPayload }
->(
-    'users/loginUser',
-    async (credentials, { rejectWithValue }) => {
-        try {
-            const request = await Api.post('/sign-in', credentials);
-            toast.success(request.data.message || "Logged in successfully!");
-            return request.data;
-        } catch (error) {
-            if (error instanceof AxiosError) {
-                const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
-                toast.error(errorMessage);
-                return rejectWithValue({ message: errorMessage });
-            }
-            const errorMessage = "An unexpected error occurred.";
-            toast.error(errorMessage);
-            return rejectWithValue({ message: errorMessage });
-        }
-    },
-);
-
-
-/**
- * Creates an async thunk to fetch the profile of a connected user.
- * This action is used to retrieve user data based on their ID from the API.
- *
- * @function getUserActions
- * @param {string} userId - The unique ID of the user whose data needs to be fetched.
- * @returns {Promise<AuthSuccessPayload | AuthRejectedPayload>} A promise that resolves with the user's data on success or an error payload on failure.
- */
-export const getUserActions = createAsyncThunk<
-    AuthSuccessPayload,
-    string,
-    { rejectValue: AuthRejectedPayload }
->(
-    'users/getUser', // A unique name for the thunk
-    async (userId, { rejectWithValue }) => {
-        try {
-            // Send a GET request to the API with the user's ID
-            const request = await Api.get(`users/${userId}`);
-            // The API response data is returned on success
-            return request.data;
-        } catch (error) {
-            if (error instanceof AxiosError) {
-                // Handle API-specific errors
-                const errorMessage = error.response?.data?.message || 'Failed to fetch user data.';
-                return rejectWithValue({ message: errorMessage });
-            }
-
-            // Handle any other unexpected errors
-            const errorMessage = 'An unexpected error occurred.';
             return rejectWithValue({ message: errorMessage });
         }
     }
 );
 
+// ═══════════════════════════════════════════════════════════════════════
+// VÉRIFICATION DU COMPTE (VERIFY ACCOUNT)
+// ═══════════════════════════════════════════════════════════════════════
 
-/**
- * Creates an async thunk to handle the deletion of a user.
- * This thunk sends a DELETE request to the API to remove a user by their ID.
- *
- * @function deleteUserActions
- * @param {string} userId - The unique ID of the user to be deleted.
- * @returns {Promise<AuthSuccessPayload | AuthRejectedPayload>} A promise that resolves with a success payload or rejects with an error payload.
- */
-export const deleteUserActions = createAsyncThunk<
+export const verifyAccountActions = createAsyncThunk<
     AuthSuccessPayload,
-    string, // Le type d'argument attendu est une chaîne de caractères (l'ID de l'utilisateur)
+    VerifyAccountInputs,
     { rejectValue: AuthRejectedPayload }
 >(
-    'users/deleteUser',
-    async (userId, { rejectWithValue }) => {
+    'auth/verifyAccount',
+    async (verifyData, { rejectWithValue }) => {
         try {
-
-            const request = await Api.delete(`/users/${userId}`);
-
-            toast.success(request.data.message || 'The user has been successfully deleted!');
-            return request.data;
+            const response = await Api.post('/auth/verify-account', verifyData);
+            toast.success(response.data.message || "Compte vérifié avec succès !");
+            return response.data;
         } catch (error) {
             if (error instanceof AxiosError) {
-                const errorMessage = error.response?.data?.message || 'An unexpected error occurred while deleting the user.';
+                const errorMessage = error.response?.data?.message || "Code OTP invalide ou expiré.";
                 toast.error(errorMessage);
                 return rejectWithValue({ message: errorMessage });
             }
-
-            const errorMessage = 'An unexpected error occurred.';
+            const errorMessage = "Une erreur inattendue est survenue.";
             toast.error(errorMessage);
             return rejectWithValue({ message: errorMessage });
         }
-    },
+    }
 );
 
+// ═══════════════════════════════════════════════════════════════════════
+// CHECK EMAIL (Étape 1 de connexion)
+// ═══════════════════════════════════════════════════════════════════════
 
+// Fichier : AuthActions.ts
 
+export const checkEmailActions = createAsyncThunk<
+    CheckEmailSuccessPayload,
+    CheckEmailInputs,
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/checkEmail',
+    async (emailData, { rejectWithValue }) => {
+        try {
+            const response = await Api.post('/check-email', emailData);
+            
+            // Log pour debug
+            console.log("Réponse complète de l'API:", response);
+            console.log("Response.data:", response.data);
+            
+            // Vérifiez la structure réelle de votre réponse
+            // Elle peut être response.data.data ou directement response.data
+            return response.data;
+            
+        } catch (error) {
+            console.error("Erreur complète:", error);
+            
+            let errorMessage: string; 
+            const defaultErrorMessage = "Erreur lors de la vérification de l'email.";
 
+            if (error instanceof AxiosError) {
+                const status = error.response?.status;
+                const responseData = error.response?.data;
+                
+                console.log("Status:", status);
+                console.log("Response data:", responseData);
+                
+                // 1. GESTION SPÉCIFIQUE DES ERREURS DE VALIDATION (422)
+                if (status === 422 && responseData && responseData.errors?.email) {
+                    errorMessage = responseData.errors.email[0];
+                    toast.error(errorMessage);
+                    return rejectWithValue({ message: errorMessage });
+                }
 
+                // 2. GESTION DES AUTRES ERREURS (404, 403, 500, etc.)
+                const apiMessage = responseData?.message;
+                errorMessage = apiMessage || defaultErrorMessage; 
 
+                // Affichage des toasts basés sur le statut
+                if (status === 404) {
+                    toast.error(errorMessage);
+                } else if (status === 403) {
+                    toast.error(errorMessage);
+                } else if (status === 500) {
+                    toast.error(errorMessage);
+                } else {
+                    toast.error(errorMessage);
+                }
+                
+                return rejectWithValue({ message: errorMessage });
+            }
+            
+            // 3. Cas d'erreur inattendue
+            errorMessage = "Une erreur inattendue est survenue (erreur réseau).";
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
+// ═══════════════════════════════════════════════════════════════════════
+// VÉRIFIER L'OTP DE CONNEXION (Étape 2A - Connexion avec OTP)
+// ═══════════════════════════════════════════════════════════════════════
 
+export const verifyLoginOtpActions = createAsyncThunk<
+    VerifyOtpSuccessPayload,
+    VerifyLoginOtpInputs,
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/verifyLoginOtp',
+    async (otpData, { rejectWithValue }) => {
+        try {
+            const response = await Api.post('/verify-login-otp', otpData);
+            toast.success(response.data.message || "Connexion réussie !");
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const status = error.response?.status;
+                const errorMessage = error.response?.data?.message;
+                
+                if (status === 403 || status === 400) {
+                    toast.error("Code OTP invalide ou expiré.");
+                } else {
+                    toast.error(errorMessage || "Erreur lors de la vérification du code.");
+                }
+                
+                return rejectWithValue({ message: errorMessage || "Code OTP invalide." });
+            }
+            const errorMessage = "Une erreur inattendue est survenue.";
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
 
-/**
- * Creates an async thunk to update the user's profile picture.
- * This thunk sends a POST request with the image file.
- *
- * @function ProfileChangAction
- * @param {{ userId: string, file: File }} payload - The user's ID and the file to upload.
- * @returns {Promise<AuthSuccessPayload | AuthRejectedPayload>} A promise that resolves with a success payload or rejects with an error payload.
- */
+// ═══════════════════════════════════════════════════════════════════════
+// CONNEXION AVEC MOT DE PASSE (Étape 2B - Alternative à l'OTP)
+// ═══════════════════════════════════════════════════════════════════════
+
+export const loginWithPasswordActions = createAsyncThunk<
+    LoginSuccessPayload,
+    LoginWithPasswordInputs,
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/loginWithPassword',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const response = await Api.post('/sign-in', credentials);
+            toast.success(response.data.message || "Connexion réussie !");
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const status = error.response?.status;
+                const errorMessage = error.response?.data?.message;
+                
+                if (status === 401) {
+                    toast.error("Identifiants invalides.");
+                } else if (status === 403) {
+                    toast.error("Votre compte n'est pas vérifié.");
+                } else {
+                    toast.error(errorMessage || "Erreur lors de la connexion.");
+                }
+                
+                return rejectWithValue({ message: errorMessage || "Connexion échouée." });
+            }
+            const errorMessage = "Une erreur inattendue est survenue.";
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// ANCIENNE MÉTHODE LOGIN (À CONSERVER POUR COMPATIBILITÉ)
+// ═══════════════════════════════════════════════════════════════════════
+
+export const loginUserActions = createAsyncThunk<
+    LoginSuccessPayload,
+    LoginFormInputs,
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/login',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const response = await Api.post('/sign-in', credentials);
+            toast.success(response.data.message || "Connexion réussie !");
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const errorMessage = error.response?.data?.message || "Identifiants invalides.";
+                toast.error(errorMessage);
+                return rejectWithValue({ message: errorMessage });
+            }
+            const errorMessage = "Une erreur inattendue est survenue.";
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// RENVOYER L'OTP
+// ═══════════════════════════════════════════════════════════════════════
+
+export const resendOtpActions = createAsyncThunk<
+    AuthSuccessPayload,
+    { email: string },
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/resendOtp',
+    async (emailData, { rejectWithValue }) => {
+        try {
+            const response = await Api.post('/auth/resend-otp', emailData);
+            toast.success(response.data.message || "Un nouveau code a été envoyé.");
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const errorMessage = error.response?.data?.message || "Erreur lors du renvoi du code.";
+                toast.error(errorMessage);
+                return rejectWithValue({ message: errorMessage });
+            }
+            const errorMessage = "Une erreur inattendue est survenue.";
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// MOT DE PASSE OUBLIÉ
+// ═══════════════════════════════════════════════════════════════════════
+
+export const forgotPasswordActions = createAsyncThunk<
+    AuthSuccessPayload,
+    ForgotPasswordInputs,
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/forgotPassword',
+    async (emailData, { rejectWithValue }) => {
+        try {
+            const response = await Api.post('/auth/forgot-password', emailData);
+            toast.success(response.data.message || "Un code de réinitialisation a été envoyé.");
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const errorMessage = error.response?.data?.message || "Erreur lors de la demande.";
+                toast.error(errorMessage);
+                return rejectWithValue({ message: errorMessage });
+            }
+            const errorMessage = "Une erreur inattendue est survenue.";
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// RÉINITIALISER LE MOT DE PASSE AVEC OTP
+// ═══════════════════════════════════════════════════════════════════════
+
+export const resetPasswordWithOtpActions = createAsyncThunk<
+    AuthSuccessPayload,
+    ResetPasswordWithOtpInputs,
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/resetPasswordWithOtp',
+    async (resetData, { rejectWithValue }) => {
+        try {
+            const response = await Api.post('/auth/verify-otp-reset', resetData);
+            toast.success(response.data.message || "Mot de passe réinitialisé avec succès !");
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const errorMessage = error.response?.data?.message || "Code invalide ou expiré.";
+                toast.error(errorMessage);
+                return rejectWithValue({ message: errorMessage });
+            }
+            const errorMessage = "Une erreur inattendue est survenue.";
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// RÉCUPÉRER L'UTILISATEUR
+// ═══════════════════════════════════════════════════════════════════════
+
+export const getUserActions = createAsyncThunk<
+    AuthSuccessPayload,
+    string,
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/getUser',
+    async (userId, { rejectWithValue }) => {
+        try {
+            const response = await Api.get(`/users/${userId}`);
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const errorMessage = error.response?.data?.message || 'Échec de récupération des données utilisateur.';
+                return rejectWithValue({ message: errorMessage });
+            }
+            const errorMessage = 'Une erreur inattendue est survenue.';
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// SUPPRIMER L'UTILISATEUR
+// ═══════════════════════════════════════════════════════════════════════
+
+export const deleteUserActions = createAsyncThunk<
+    AuthSuccessPayload,
+    string,
+    { rejectValue: AuthRejectedPayload }
+>(
+    'auth/deleteUser',
+    async (userId, { rejectWithValue }) => {
+        try {
+            const response = await Api.delete(`/users/${userId}`);
+            toast.success(response.data.message || 'Utilisateur supprimé avec succès !');
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const errorMessage = error.response?.data?.message || 'Erreur lors de la suppression.';
+                toast.error(errorMessage);
+                return rejectWithValue({ message: errorMessage });
+            }
+            const errorMessage = 'Une erreur inattendue est survenue.';
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// CHANGER LA PHOTO DE PROFIL
+// ═══════════════════════════════════════════════════════════════════════
+
 export const ProfileChangAction = createAsyncThunk<
     AuthSuccessPayload,
     { userId: string, file: File },
     { rejectValue: AuthRejectedPayload }
 >(
-    'users/ProfileChangAction',
+    'auth/changeProfilePicture',
     async ({ userId, file }, { rejectWithValue }) => {
         try {
             if (!file) {
-                const errorMessage = 'No file provided.';
+                const errorMessage = 'Aucun fichier fourni.';
                 toast.error(errorMessage);
                 return rejectWithValue({ message: errorMessage });
             }
@@ -177,62 +404,48 @@ export const ProfileChangAction = createAsyncThunk<
             const formData = new FormData();
             formData.append('file', file);
 
-            // Envoie la requête POST à l'API
-            const request = await Api.post(`/users/${userId}/change-picture`, formData);
-
-            toast.success(request.data.message || 'Your profile picture has been successfully updated!');
-            return request.data;
+            const response = await Api.post(`/users/${userId}/change-picture`, formData);
+            toast.success(response.data.message || 'Photo de profil mise à jour !');
+            return response.data;
         } catch (error) {
-            // LIGNE AJOUTÉE ICI
-            console.error("Erreur complète lors de la mise à jour de l'image de profil:", error);
-
-            // Logique pour gérer les erreurs Axios
+            console.error("Erreur lors de la mise à jour de la photo de profil:", error);
+            
             if (error instanceof AxiosError) {
-                // Tente de récupérer le message d'erreur du backend
-                const backendErrorMessage = error.response?.data?.message;
-
-                if (backendErrorMessage) {
-                    toast.error(backendErrorMessage); // Affiche le message d'erreur du backend
-                    return rejectWithValue({ message: backendErrorMessage });
-                }
-
-                // Affiche un message d'erreur par défaut si le backend n'en a pas fourni
-                const genericErrorMessage = 'An error occurred while updating your profile picture.';
-                toast.error(genericErrorMessage);
-                return rejectWithValue({ message: genericErrorMessage });
+                const errorMessage = error.response?.data?.message || 'Erreur lors de la mise à jour.';
+                toast.error(errorMessage);
+                return rejectWithValue({ message: errorMessage });
             }
-
-            // Gère les erreurs non-Axios (erreurs réseau, etc.)
-            const unexpectedErrorMessage = 'An unexpected error occurred.';
-            toast.error(unexpectedErrorMessage);
-            return rejectWithValue({ message: unexpectedErrorMessage });
+            const errorMessage = 'Une erreur inattendue est survenue.';
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
         }
-    },
+    }
 );
+
+// ═══════════════════════════════════════════════════════════════════════
+// METTRE À JOUR LES INFORMATIONS DU PROFIL
+// ═══════════════════════════════════════════════════════════════════════
 
 export const UpdateProfileInfoAction = createAsyncThunk<
     AuthSuccessPayload,
     UpdateProfileInfoPayload,
     { rejectValue: AuthRejectedPayload }
 >(
-    'users/updateProfileInfo',
+    'auth/updateProfileInfo',
     async (profileData, { rejectWithValue }) => {
         try {
             const { userId, ...dataToUpdate } = profileData;
-            const request = await Api.patch(`/users/${userId}`, dataToUpdate);
+            const response = await Api.patch(`/users/${userId}`, dataToUpdate);
 
-            toast.success(request.data.message || 'Informations de profil mises à jour !');
-            return request.data;
+            toast.success(response.data.message || 'Profil mis à jour !');
+            return response.data;
         } catch (error) {
-            console.error("Erreur complète lors de la mise à jour du profil:", error);
+            console.error("Erreur lors de la mise à jour du profil:", error);
 
             if (error instanceof AxiosError) {
-                // Tente d'extraire le message d'erreur détaillé du backend
                 const backendErrorMessage = error.response?.data?.message;
 
-                // Vérifie si le message est un objet avec des détails
                 if (backendErrorMessage && typeof backendErrorMessage === 'object') {
-                    // Parcourt les clés de l'objet pour trouver les messages d'erreur
                     const firstKey = Object.keys(backendErrorMessage)[0];
                     if (firstKey) {
                         const specificError = backendErrorMessage[firstKey][0];
@@ -241,89 +454,70 @@ export const UpdateProfileInfoAction = createAsyncThunk<
                     }
                 }
 
-                // Si le message d'erreur n'est pas un objet ou s'il n'existe pas, utilise un message générique
-                const errorMessage = error.response?.data?.message || 'Une erreur est survenue lors de la mise à jour du profil.';
+                const errorMessage = error.response?.data?.message || 'Erreur lors de la mise à jour.';
                 toast.error(errorMessage);
                 return rejectWithValue({ message: errorMessage });
             }
 
-            // Gère les erreurs non-Axios (moins courantes)
             const errorMessage = 'Une erreur inattendue est survenue.';
             toast.error(errorMessage);
             return rejectWithValue({ message: errorMessage });
         }
-    },
+    }
 );
 
+// ═══════════════════════════════════════════════════════════════════════
+// DÉCONNEXION
+// ═══════════════════════════════════════════════════════════════════════
 
-/**
- * Creates an async thunk to handle user logout.
- * This thunk sends a DELETE request to the API to invalidate the user's session.
- *
- * @function logoutUserActions
- * @returns {Promise<AuthSuccessPayload | AuthRejectedPayload>} A promise that resolves with a success payload or rejects with an error payload.
- */
 export const logoutUserActions = createAsyncThunk<
     AuthSuccessPayload,
     void,
     { rejectValue: AuthRejectedPayload }
 >(
-    'users/logoutUser',
+    'auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            const request = await Api.delete('/auth/logout');
-
-            toast.success(request.data.message || "Vous êtes déconnecté avec succès !");
-
-            return request.data;
+            const response = await Api.post('/auth/logout');
+            toast.success(response.data.message || "Déconnexion réussie !");
+            return response.data;
         } catch (error) {
             if (error instanceof AxiosError) {
-                const errorMessage = error.response?.data?.message || "Une erreur inattendue est survenue lors de la déconnexion.";
+                const errorMessage = error.response?.data?.message || "Erreur lors de la déconnexion.";
                 toast.error(errorMessage);
                 return rejectWithValue({ message: errorMessage });
             }
-
-            // Gère les erreurs génériques (réseau, etc.)
             const errorMessage = "Une erreur inattendue est survenue.";
             toast.error(errorMessage);
             return rejectWithValue({ message: errorMessage });
         }
-    },
+    }
 );
 
+// ═══════════════════════════════════════════════════════════════════════
+// ANCIENNE MÉTHODE RESET PASSWORD (À CONSERVER)
+// ═══════════════════════════════════════════════════════════════════════
 
-
-
-/**
- * Creates an async thunk to handle the user's password reset.
- * This thunk sends a reset password email to the provided user's email address.
- *
- * @function ResetPasswordActions
- * @param {string} email - The email address of the user.
- * @returns {Promise<AuthSuccessPayload | AuthRejectedPayload>} A promise that resolves with a success payload or rejects with an error payload.
- */
 export const ResetPasswordActions = createAsyncThunk<
     AuthSuccessPayload,
     string,
     { rejectValue: AuthRejectedPayload }
 >(
-    'users/resetPassword',
+    'auth/resetPassword',
     async (email, { rejectWithValue }) => {
         try {
-            const request = await Api.post('/auth/reset-password', { email });
-
-            toast.success(request.data.message || 'A password reset link has been sent to your email address!');
-            return request.data;
+            const response = await Api.post('/auth/reset-password', { email });
+            toast.success(response.data.message || 'Lien de réinitialisation envoyé !');
+            return response.data;
         } catch (error) {
             if (error instanceof AxiosError) {
-                const errorMessage = error.response?.data?.message || 'An unexpected error occurred while requesting the password reset.';
+                const errorMessage = error.response?.data?.message || 'Erreur lors de la demande.';
                 toast.error(errorMessage);
                 return rejectWithValue({ message: errorMessage });
             }
-
-            const errorMessage = 'An unexpected error occurred.';
+            const errorMessage = 'Une erreur inattendue est survenue.';
             toast.error(errorMessage);
             return rejectWithValue({ message: errorMessage });
         }
-    },
+    }
 );

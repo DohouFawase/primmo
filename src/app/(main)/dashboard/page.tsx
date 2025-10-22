@@ -24,7 +24,7 @@ const DashboardPage: React.FC = () => {
     });
 
     return (
-        <div className="max-w-7xl mx-auto px-8 md:px-16">
+        <div className="container   mx-auto px-4">
             
           <div className="space-y-3">
             <FiltreComponents/>

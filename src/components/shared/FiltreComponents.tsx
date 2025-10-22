@@ -11,7 +11,7 @@ export default function FiltreComponents() {
     };
 
     return (
-        <div className="flex justify-center items-center py-3.5 px-4 max-w-7xl mx-auto ">
+        <div className="flex justify-center items-center py-3.5 px-4 container   mx-auto ">
             {/* Conteneur principal de la barre de recherche */}
             <div className="
           flex items-center

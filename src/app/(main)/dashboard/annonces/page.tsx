@@ -4,11 +4,12 @@ import { Plus } from "lucide-react";
 import AnnonceCard from "./_components/AnnouceCard";
 import { AnnonceDataMock } from "@/mock/allData";
 import FiltreComponents from "@/components/shared/FiltreComponents";
+import PropertyListingForm from "./_components/CreateAnounce";
 
 export default function page() {
     return (
         <>
-            <div className="max-w-7xl mx-auto   space-y-12  ">
+            <div className="container  px-4 mx-auto   space-y-12  ">
                 <FiltreComponents />
                 <div className="flex md:flex-row flex-col px-8 md:px-18 justify-between md:items-center mt-24">
                     <div className="flex items-center  gap-8 md:space-x-24  ">
@@ -41,6 +42,9 @@ export default function page() {
                         </div>
                     </div>
                 </div>
+
+
+<PropertyListingForm />
 
                 <div className="px-8 md:px-16 space-y-4 mt-12">
                     {AnnonceDataMock.map((annonce) => (

@@ -20,7 +20,7 @@ export default function Footer() {
                     <div className="border-t border-b ">
                         <div
                             className="
-text-white px-8 md:px-16 py-10 mt-8 max-w-7xl mx-auto
+text-white px-4 mt-8 container   mx-auto
                     "
                         >
                               <div

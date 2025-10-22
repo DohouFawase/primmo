@@ -7,7 +7,7 @@ const AnnounceComponets = () => {
         <div>
              <div>
             <div>
-                <div className="space-y-4 md:space-y-8 lg:space-y-14 max-w-7xl mx-auto">
+                <div className="space-y-4 md:space-y-8 lg:space-y-14 container   mx-auto">
                    <h1 className=' text-base md:text-2xl font-semibold px-18'>Mes annonces </h1>
 
                     <div className='grid grid-cols-1 px-8 md:px-16 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4'>

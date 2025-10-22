@@ -1,8 +1,10 @@
+
 import type { Metadata } from "next";
 import {  Poppins } from "next/font/google";
 import "../globals.css";
 import Footer from "@/components/shared/home/footer";
 import NavigationBar from "@/components/shared/home/NavigationBar";
+import { ReduceProvider } from "@/providers/ReduxProvider";
 
 
 
@@ -31,9 +33,13 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} `}
       >
+        
+        <ReduceProvider>
+
         <NavigationBar />
         {children}
         <Footer />
+        </ReduceProvider>
       </body>
     </html>
   );
