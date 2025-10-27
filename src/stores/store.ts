@@ -1,6 +1,8 @@
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import authReducer from '@/slice/AuthSlice'
+import propertyTypesReducer  from "@/slice/PropertySlice"
+import EquipementReducer  from "@/slice/EquipementSlice"
 import {
     persistStore, persistReducer
 } from 'redux-persist'
@@ -9,12 +11,14 @@ import cookieStorage from '@/utils/cookiesStorage';
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    propertyType: propertyTypesReducer,
+    equipement: EquipementReducer,
 });
 
 const persistConfig = {
     key: 'root',
-    storage: cookieStorage, // Utilise ton moteur de stockage basé sur les cookies
-    whitelist: ['auth'], // Seul le slice 'auth' sera persistant
+    storage: cookieStorage, 
+    whitelist: ['auth'],
     // blacklist: ['talent'], // Optionnel : pour exclure explicitement un slice
 };
 

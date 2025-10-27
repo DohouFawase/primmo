@@ -120,3 +120,30 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.step-items {
+  @apply relative flex flex-col justify-center items-center w-full
+}
+
+.step-items:not(:first-child)::before {
+  @apply content-[''] bg-[#007BFF] absolute w-full h-[3px] right-2/4 top-1/4 -translate-y-2/4
+}
+
+
+.step {
+  @apply w-5 h-5 flex z-10 text-xs text-white  p-2 relative bg-black rounded-full items-center justify-center
+}
+
+
+.active .step {
+  @apply bg-[#007BFF]
+}
+
+.complete .step {
+  @apply bg-[#007BFF]
+}
+
+.complete p {
+  @apply text-black
+}

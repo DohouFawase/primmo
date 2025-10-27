@@ -201,36 +201,50 @@ export interface LoginSuccessPayload {
 }
 
 
-
-export interface UserPreferences {
-    userId: string;
-    currency?: string;
-    language?: string;
-    timezone?: string;
+export interface SerializedError {
+  name?: string
+  message?: string
+  code?: string
+  stack?: string
 }
 
-
-
-export interface UpdateProfileInfoPayload {
-    userId: string;
-    firstname?: string;
-    lastname?: string;
-    email?: string;
-    phoneNumber?: string;
-    // country?: string;
+export interface PendingAction<ThunkArg> {
+  type: string
+  payload: undefined
+  meta: {
+    requestId: string
+    arg: ThunkArg
+  }
 }
 
-export interface UserPreferences {
-    userId: string;
-    currency?: string;
-    language?: string;
-    timezone?: string;
+export interface FulfilledAction<ThunkArg, PromiseResult> {
+  type: string
+  payload: PromiseResult
+  meta: {
+    requestId: string
+    arg: ThunkArg
+  }
 }
 
-export interface UpdateProfileInfoPayload {
-    userId: string;
-    firstname?: string;
-    lastname?: string;
-    email?: string;
-    phoneNumber?: string;
+export interface RejectedAction<ThunkArg> {
+  type: string
+  payload: undefined
+  error: SerializedError | any
+  meta: {
+    requestId: string
+    arg: ThunkArg
+    aborted: boolean
+    condition: boolean
+  }
+}
+
+export interface RejectedWithValueAction<ThunkArg, RejectedValue> {
+  type: string
+  payload: RejectedValue
+  error: { message: 'Rejected' }
+  meta: {
+    requestId: string
+    arg: ThunkArg
+    aborted: boolean
+  }
 }
